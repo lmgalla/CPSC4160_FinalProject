@@ -6,6 +6,7 @@ ZERO = 0
 running = True;
 speedVar = .075
 
+#class for the background / track
 class Track: 
     def initTrack(self, image_path, x, y):
         self.image = pygame.image.load(image_path)
@@ -37,9 +38,29 @@ class Car:
         pygame.Surface.blit(surface, self.image, self.rect)
         pygame.display.update()
 
+#Class for cop cars / obstacles 
+class CopCar():
+    def initCar(self, image_path, x, y, speed):
+        super().__init__
+        self.image = pygame.image.load(image_path)
+        new_size = (200, 100)
+        self.image = pygame.transform.scale(self.image, new_size)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.speed = speed
+        
+
+    def draw(self, surface):
+        pygame.Surface.blit(surface, self.image, self.rect)
+        #pygame.display.update()
+    
+    def update(self, speed):
+        self.rect.x -= -speed
+
 
 # Create Window
-SCREEN_HEIGHT = 1000
+SCREEN_HEIGHT = 800
 SCREEN_WIDTH = 1400
 SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT
 
@@ -89,39 +110,17 @@ screenColor = (255, 255, 255)
 surface.fill(screenColor)
 screen_rect = surface.get_rect()
 
-sky = pygame.Rect(ZERO, ZERO, 1400, 800)
+top = pygame.Rect(ZERO, ZERO, 1400, 800)
 grass = pygame.Rect(ZERO, 400, 1000, 100)
 Track.initTrack(Track, "track.webp", 0, 0)
 Car.initCar(Car, "racecar.svg", 100, 100, 10)
+CopCar.initCar(CopCar, "p-car-top-view-hi.png", SCREEN_WIDTH, 100, 100)
 
 # Show start screen
 start_screen()
 
-
-# Create the "Ground"
-def drawGround():
-    """
-    point1 = (ZERO, 400)
-    point2 = (1000, 400)
-    lineColor = (ZERO, ZERO, ZERO)
-    #sky = pygame.draw.rect(surface, (173, 216, 230), pygame.Rect(ZERO, ZERO, 1000, 400))
-    #grass = pygame.draw.rect(surface, (76, 187, 23), pygame.Rect(ZERO, 400, 1000, 100))
-    stopLine = pygame.draw.line(surface, lineColor, point1, point2)
-    """
-
-
-# Add Obstacles
-obstacle_width = 50
-obstacle_height = 50
-obstacle_color = (ZERO, ZERO, 255)
-obstacle_speed = 5
-obstacles = []
-
-
-def create_obstacle():
-    obstacle_pos = (SCREEN_WIDTH, random.randint(ZERO, 350))
-    obstacle_rect = pygame.Rect(obstacle_pos[ZERO], obstacle_pos[1], obstacle_width, obstacle_height)
-    obstacles.append(obstacle_rect)
+# Create an array for Cop Cars 
+CopCars = []
 
 
 # Car movements
@@ -164,32 +163,24 @@ while running:
         if event.type == pygame.QUIT:
             running = False
     moveCar(Car.speed)
-    surface.fill(screenColor)
     Track.draw(Track, surface)
-    drawGround()
 
-    # Check timer to spawn obstacles
-    current_time = pygame.time.get_ticks()
-    if current_time - obstacle_timer > 2500:
-        # print(obstacle_speed+counter*.005)
-        create_obstacle()
-        obstacle_timer = current_time
-    """
-    # Draw and update obstacles
-    for obstacle_rect in obstacles:
-        pygame.draw.rect(surface, obstacle_color, obstacle_rect)
-        obstacle_rect.move_ip(-obstacle_speed - (counter * speedVar), ZERO)
+    #This part is for the Cop Cars 
+    if (len(CopCars) < 1):
+        CopCar.initCar(CopCar, "p-car-top-view-hi.png", SCREEN_WIDTH, random.randint(10, 790), 100)
+        CopCars.append(CopCar)
 
-        # Check for collision with character
-        if Car.rect.colliderect(obstacle_rect):
-            print("Collision detected!")
-            game_over();
-            counter = ZERO;
-        """
+    for CopCar in CopCars:
+        CopCar.update(CopCar, 10 - (counter*speedVar))
+        if(CopCar.rect.x < 0):
+            CopCars.remove(CopCar)
+        
+    
+    CopCar.draw(CopCar, surface)
     Car.draw(Car, surface)
     pygame.display.update()
 
-    Car.rect.clamp_ip(sky)  # ensure player is inside screen
+    Car.rect.clamp_ip(top)  # ensure player is inside screen
 
 # Loop Exited
 pygame.quit()
