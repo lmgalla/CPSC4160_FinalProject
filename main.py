@@ -9,7 +9,7 @@ speedVar = .075
 class Track: 
     def initTrack(self, image_path, x, y):
         self.image = pygame.image.load(image_path)
-        new_size = (500, 1000)
+        new_size = (800, 1400)
         self.image = pygame.transform.scale(self.image, new_size)
         self.image = pygame.transform.rotate(self.image, 90)
 
@@ -39,8 +39,8 @@ class Car:
 
 
 # Create Window
-SCREEN_HEIGHT = 500
-SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 1000
+SCREEN_WIDTH = 1400
 SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT
 
 
@@ -89,7 +89,7 @@ screenColor = (255, 255, 255)
 surface.fill(screenColor)
 screen_rect = surface.get_rect()
 
-sky = pygame.Rect(ZERO, ZERO, 1000, 400)
+sky = pygame.Rect(ZERO, ZERO, 1400, 800)
 grass = pygame.Rect(ZERO, 400, 1000, 100)
 Track.initTrack(Track, "track.webp", 0, 0)
 Car.initCar(Car, "racecar.svg", 100, 100, 10)
