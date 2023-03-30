@@ -74,8 +74,15 @@ def start_screen():
     font = pygame.font.SysFont(None, 50)
     title = font.render("Racing Simulator", True, (255, 255, 255))
     start_button = pygame.Rect(400, 300, 200, 50)
-    button_color = (ZERO, ZERO, 255)
+    button_color = (0, 0, 255)
     text_color = (255, 255, 255)
+
+    # Calculate the center of the screen
+    center_x = SCREEN_WIDTH // 2
+    center_y = SCREEN_HEIGHT // 2
+
+    # Calculate the position of the start button to center it
+    start_button.center = (center_x, center_y)
 
     # Wait for the user to click the start button
     while True:
@@ -93,8 +100,8 @@ def start_screen():
                     sys.exit()
 
         # Draw the start screen
-        surface.fill((ZERO, ZERO, ZERO))
-        surface.blit(title, (SCREEN_WIDTH // 2 - title.get_width() // 2, 100))
+        surface.fill((0, 0, 0))
+        surface.blit(title, (center_x - title.get_width() // 2, center_y - 200))
         pygame.draw.rect(surface, button_color, start_button)
         font = pygame.font.SysFont(None, 30)
         start_text = font.render("Start", True, text_color)
