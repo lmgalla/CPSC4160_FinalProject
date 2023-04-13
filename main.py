@@ -1,13 +1,22 @@
 
-import pygame, sys, character, turtle, random
+import pygame
+import sys
+import character
+import turtle
+import random
+import math
 
 ZERO = 0
 # global variable for game loop
-running = True;
+running = True
 speedVar = .075
 
-#class for the background / track
-class Track: 
+# class for the background / track
+
+track_image = pygame.image.load("Track.png")
+
+
+class Track:
     def initTrack(self, image_path, x, y):
         self.image = pygame.image.load(image_path)
         new_size = (800, 1400)
@@ -20,7 +29,7 @@ class Track:
 
     def draw(self, surface):
         pygame.Surface.blit(surface, self.image, self.rect)
-        #pygame.display.update()
+        # pygame.display.update()
 
 
 # Create Car Class
@@ -38,7 +47,9 @@ class Car:
         pygame.Surface.blit(surface, self.image, self.rect)
         pygame.display.update()
 
-#Class for cop cars / obstacles 
+# Class for cop cars / obstacles
+
+
 class CopCar():
     def initCar(self, image_path, x, y, speed):
         super().__init__
@@ -49,18 +60,17 @@ class CopCar():
         self.rect.x = x
         self.rect.y = y
         self.speed = speed
-        
 
     def draw(self, surface):
         pygame.Surface.blit(surface, self.image, self.rect)
-        #pygame.display.update()
-    
+        pygame.display.update()
+
     def update(self, speed):
         self.rect.x -= -speed
 
 
 # Create Window
-SCREEN_HEIGHT = 800
+SCREEN_HEIGHT = 530
 SCREEN_WIDTH = 1400
 SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT
 
@@ -101,7 +111,8 @@ def start_screen():
 
         # Draw the start screen
         surface.fill((0, 0, 0))
-        surface.blit(title, (center_x - title.get_width() // 2, center_y - 200))
+        surface.blit(
+            title, (center_x - title.get_width() // 2, center_y - 200))
         pygame.draw.rect(surface, button_color, start_button)
         font = pygame.font.SysFont(None, 30)
         start_text = font.render("Start", True, text_color)
@@ -112,21 +123,27 @@ def start_screen():
 
 # Initialize Game
 pygame.init()
+
+clock = pygame.time.Clock()
+FPS = 10
 surface = pygame.display.set_mode(SCREEN_SIZE)
 screenColor = (255, 255, 255)
 surface.fill(screenColor)
 screen_rect = surface.get_rect()
 
 top = pygame.Rect(ZERO, ZERO, 1400, 800)
-grass = pygame.Rect(ZERO, 400, 1000, 100)
-Track.initTrack(Track, "track.webp", 0, 0)
+bottom = pygame.Rect(ZERO, ZERO, 1400, 530)
+
+Track.initTrack(Track, "track.png", 0, 0)
 Car.initCar(Car, "racecar.svg", 100, 100, 10)
 CopCar.initCar(CopCar, "p-car-top-view-hi.png", SCREEN_WIDTH, 100, 100)
 
 # Show start screen
 start_screen()
 
-# Create an array for Cop Cars 
+bg = pygame.image.load("Track.png").convert()
+
+# Create an array for Cop Cars
 CopCars = []
 
 
@@ -156,6 +173,11 @@ def game_over():
 
 # Game Loop
 obstacle_timer = pygame.time.get_ticks()
+bg_width = bg.get_width()
+bg_rect = bg.get_rect()
+titles = math.ceil(SCREEN_WIDTH / bg_width)
+scroll = 0
+print(titles)
 
 while running:
     for event in pygame.event.get():
@@ -163,31 +185,51 @@ while running:
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
+
     pygame.display.set_caption("Air Time: " + str(counter))
     counter += 1
+    # frame rate
+    # clock.tick(FPS)
+
+    # draw scrolling background
+    for i in range(0, 2):
+
+        surface.blit(bg, (i * bg_width * scroll, 0))
+        surface.blit(bg, (i * bg_width, 0))
+        bg_rect.x = i * bg_width*scroll
+        pygame.draw.rect(surface, (255, 0, 0), bg_rect, 1)
+
+    scroll -= 0.1
+
+    # reset scroll
+    if abs(scroll) > bg_width*2:
+        scroll = 0
+        # pygame.display.update()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    moveCar(Car.speed)
-    Track.draw(Track, surface)
 
-    #This part is for the Cop Cars 
+    moveCar(Car.speed)
+    # Track.draw(Track, surface)
+
+    # This part is for the Cop Cars
     if (len(CopCars) < 1):
-        CopCar.initCar(CopCar, "p-car-top-view-hi.png", SCREEN_WIDTH, random.randint(10, 790), 100)
+        CopCar.initCar(CopCar, "p-car-top-view-hi.png",
+                       SCREEN_WIDTH, random.randint(10, 790), 100)
         CopCars.append(CopCar)
 
     for CopCar in CopCars:
         CopCar.update(CopCar, 10 - (counter*speedVar))
-        if(CopCar.rect.x < 0):
+        if (CopCar.rect.x < 0):
             CopCars.remove(CopCar)
-        
-    
+
     CopCar.draw(CopCar, surface)
     Car.draw(Car, surface)
     pygame.display.update()
 
-    Car.rect.clamp_ip(top)  # ensure player is inside screen
+    Car.rect.clamp_ip(top)
+    Car.rect.clamp_ip(bottom)  # ensure player is inside screen
 
 # Loop Exited
 pygame.quit()
