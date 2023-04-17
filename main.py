@@ -94,6 +94,13 @@ def start_screen():
     button_color = (ZERO, ZERO, 255)
     text_color = (255, 255, 255)
 
+    # Calculate the center of the screen
+    center_x = SCREEN_WIDTH // 2
+    center_y = SCREEN_HEIGHT // 2
+
+    # Calculate the position of the start button to center it
+    start_button.center = (center_x, center_y)
+
     # Wait for the user to click the start button
     while True:
         # Handle events
@@ -113,7 +120,6 @@ def start_screen():
         screen.fill((ZERO, ZERO, ZERO))
         screen.blit(title, (SCREEN_WIDTH // 2 - title.get_width() // 2, 100))
         pygame.draw.rect(screen, button_color, start_button)
-
         font = pygame.font.SysFont(None, 30)
         start_text = font.render("Start", True, text_color)
         screen.blit(start_text, (start_button.x + start_button.width // 2 - start_text.get_width() // 2,
