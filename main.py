@@ -174,7 +174,7 @@ def game_over():
     font = pygame.font.Font(None, 36)
     text = font.render("CRASH! GAME OVER!", True, (255, ZERO, ZERO))
     text_rect = text.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
-    surface.blit(text, text_rect)
+    screen.blit(text, text_rect)
     pygame.display.update()
 
 
@@ -200,14 +200,22 @@ while running:
 
     #This part is for the Cop Cars 
     if (len(CopCars) < 1):
-        CopCar.initCar(CopCar, "p-car-top-view-hi.png", SCREEN_WIDTH, random.randint(10, 790), 100)
+        CopCar.initCar(CopCar, "p-car-top-view-hi.png", SCREEN_WIDTH, random.randint(10, 790), 10)
+        #CopCar.initCar(CopCar, "p-car-top-view-hi.png", SCREEN_WIDTH, 10, 100)
+
         CopCars.append(CopCar)
 
     for CopCar in CopCars:
-        CopCar.update(CopCar, 10 - (counter*speedVar))
+        #CopCar.update(CopCar, 10 - (counter*speedVar))
+        CopCar.update(CopCar, -10)
         if(CopCar.rect.x < 0):
             CopCars.remove(CopCar)
         
+    if CopCar.rect.colliderect(Car.rect):
+        print("collision")
+        game_over()
+        
+    
     
     CopCar.draw(CopCar, screen)
 
