@@ -177,11 +177,31 @@ def moveCar(speed):
 
 # Function to end the game when collision detected
 def game_over():
-    font = pygame.font.Font(None, 36)
+    end_screen = pygame.Surface(SCREEN_SIZE)
+    end_screen.fill((0,0,0))
+    font = pygame.font.Font(None, 50)
+
     text = font.render("CRASH! GAME OVER!", True, (255, ZERO, ZERO))
-    text_rect = text.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
+    text_rect = text.get_rect(center=(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) - 100))
+    #text2 = font.render("PRESS R TO RESTART", True, (255, ZERO, ZERO))
+    #text2_rect = text.get_rect(center=(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + 100))
+    text3 = font.render("PRESS M TO RETURN TO MAIN MENU", True, (255, ZERO, ZERO))
+    text3_rect = text.get_rect(center=(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + 200))
+    
+    screen.blit(end_screen, (0,0))
     screen.blit(text, text_rect)
+    #screen.blit(text2, text2_rect)
+    screen.blit(text3, text3_rect)
     pygame.display.update()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_m:
+                    start_screen()
+                    exit()
+
+
 
 
 # Game Loop
@@ -216,12 +236,6 @@ while running:
         CopCar.update(CopCar, -10)
         if(CopCar.rect.x < 0):
             CopCars.remove(CopCar)
-        
-    if CopCar.rect.colliderect(Car.rect):
-        print("collision")
-        game_over()
-        
-    
     
     CopCar.draw(CopCar, screen)
 
@@ -230,5 +244,11 @@ while running:
 
     Car.rect.clamp_ip(top)  # ensure player is inside screen
 
+    if CopCar.rect.colliderect(Car.rect):
+        print("collision")
+        game_over()
+        running = False
+
 # Loop Exited
-pygame.quit()
+# pygame.quit()
+pygame.time.wait(100)
