@@ -1,5 +1,5 @@
 
-import pygame, turtle, random, character, background
+import pygame, turtle, random, character, background, sys
 
 ZERO = 0
 # global variable for game loop
