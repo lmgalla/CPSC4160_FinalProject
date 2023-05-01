@@ -21,6 +21,13 @@ def start_screen():
     button_color = (ZERO, ZERO, 255)
     text_color = (255, 255, 255)
 
+    # Calculate the center of the screen
+    center_x = background.SCREEN_WIDTH // 2
+    center_y = background.SCREEN_HEIGHT // 2
+
+    # Calculate the position of the start button to center it
+    start_button.center = (center_x, center_y)
+
     # Wait for the user to click the start button
     while True:
         # Handle events
