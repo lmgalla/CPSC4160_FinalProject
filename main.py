@@ -6,8 +6,6 @@ ZERO = 0
 running = True;
 speedVar = .075
 FRAME_RATE = 60
-
-
 clock = pygame.time.Clock()
         
 
