@@ -1,5 +1,5 @@
 
-import pygame, turtle, random, character, background, sys
+import pygame, turtle, random, character, background, sys, vars
 
 ZERO = 0
 # global variable for game loop
@@ -64,7 +64,9 @@ screen_rect = background.screen.get_rect()
 
 top = pygame.Rect(ZERO, ZERO, 1400, 800)
 grass = pygame.Rect(ZERO, 400, 1000, 100)
-background.Track.initTrack(background.Track, "track.webp", 0, 0)
+#background.Track.initTrack(background.Track, "track.webp", 0, 0)
+background.Track.initTrack(background.Track, "images.png", 0, 0)
+
 
 character.Car.initCar(character.Car, "racecar.svg", 200, 200, 10)
 character.CarAcc.initCar(character.CarAcc, "racecar3.png", 40, 125, 10)
@@ -142,13 +144,18 @@ while running:
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
+            if event.key == pygame.K_x:
+                pygame.quit()
+                sys.exit()
+
     pygame.display.set_caption("Air Time: " + str(counter))
     counter += 1
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    
+
+    vars.xVar-=10
     background.Track.draw(background.Track)
     character.Car.draw(character.Car, background.screen)
     moveCar(character.Car.speed)
@@ -172,11 +179,12 @@ while running:
     
 
     character.Car.rect.clamp_ip(top)  # ensure player is inside screen
-
+    
     if character.CopCar.rect.colliderect(character.Car.rect):
         print("collision")
         game_over()
         running = False
+    
 
 # Loop Exited
 # pygame.quit()
