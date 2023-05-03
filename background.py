@@ -1,11 +1,11 @@
-import pygame, vars
+import pygame, vars, loop, sys
 
 # Create Window
 SCREEN_HEIGHT = 800
 SCREEN_WIDTH = 1400
 SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT
 screen = pygame.display.set_mode(SCREEN_SIZE)
-#x = 0
+
 
 class CoverImage:
     def initImage(self, image_path):
@@ -66,6 +66,7 @@ def start_screen():
                 sys.exit()
             elif (event.type == pygame.MOUSEBUTTONDOWN and event.button == 1):
                 if start_button.collidepoint(event.pos):
+                    loop.game_loop()
                     return  # Start the game loop
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -83,3 +84,36 @@ def start_screen():
                                   start_button.y + start_button.height // 2 - start_text.get_height() // 2))
         
         pygame.display.update()
+
+
+# Function to end the game when collision detected and display the end screen 
+def game_over():
+    end_screen = pygame.Surface(SCREEN_SIZE)
+    end_screen.fill((0,0,0))
+    crashFont = pygame.font.Font(None, 100)
+    font = pygame.font.Font(None, 50)
+
+    text = crashFont.render("CRASH! GAME OVER!", True, (255, vars.ZERO, vars.ZERO))
+    text_rect = text.get_rect(center=(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) - 200))
+    text2 = font.render("PRESS M TO RETURN TO MAIN MENU", True, (255, vars.ZERO, vars.ZERO))
+    text2_rect = text.get_rect(center=((SCREEN_WIDTH / 2)+50, (SCREEN_HEIGHT / 2)+100))
+    text3 = font.render("PRESS X or ESC to EXIT", True, (255, vars.ZERO, vars.ZERO))
+    text3_rect = text.get_rect(center=((SCREEN_WIDTH / 2)+150, (SCREEN_HEIGHT/2) + 200))
+    
+    screen.blit(end_screen, (0,0))
+    screen.blit(text, text_rect)
+    screen.blit(text2, text2_rect)
+    screen.blit(text3, text3_rect)
+    pygame.display.update()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_m:
+                    loop.reset()
+                    start_screen()
+                    exit()
+                if event.key == pygame.K_x:
+                    exit()
+                if event.key == pygame.K_ESCAPE:
+                    exit()
