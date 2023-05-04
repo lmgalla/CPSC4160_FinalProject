@@ -1,5 +1,6 @@
 
 import pygame, turtle, character, background, sys, loop, vars
+import pygame.mixer
 
 # global variable for game loop
 running = True
@@ -9,6 +10,9 @@ counter = vars.ZERO
 
 # Initialize Game
 pygame.init()
+pygame.mixer.init()
+music = pygame.mixer.music.load('electronic-future-beats-117997.mp3')
+pygame.mixer.music.play(-1)
 screenColor = (255, 255, 255)
 background.screen.fill(screenColor)
 screen_rect = background.screen.get_rect()
