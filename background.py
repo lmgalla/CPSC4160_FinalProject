@@ -38,7 +38,7 @@ class Track:
         screen.blit(self.image, (vars.xVar + self.width, 0))
         
 
-
+#function needed to display and use start screen
 def start_screen():
     CoverImage.initImage(CoverImage, "gameBackground.png")
     CoverImage.drawImage(CoverImage)
@@ -74,7 +74,6 @@ def start_screen():
                     sys.exit()
 
         # Draw the start screen
-        #screen.fill((vars.ZERO, vars.ZERO, vars.ZERO))
         screen.blit(title, (SCREEN_WIDTH // 2 - title.get_width() // 2, 100))
         pygame.draw.rect(screen, button_color, start_button)
 
@@ -93,6 +92,7 @@ def game_over():
     crashFont = pygame.font.Font(None, 100)
     font = pygame.font.Font(None, 50)
 
+    #display text
     text = crashFont.render("CRASH! GAME OVER!", True, (255, vars.ZERO, vars.ZERO))
     text_rect = text.get_rect(center=(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) - 200))
     text2 = font.render("PRESS M TO RETURN TO MAIN MENU", True, (255, vars.ZERO, vars.ZERO))
@@ -106,6 +106,7 @@ def game_over():
     screen.blit(text3, text3_rect)
     pygame.display.update()
 
+    #loop for end screen awaiting user action 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
