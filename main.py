@@ -3,9 +3,7 @@ import pygame, turtle, character, background, sys, loop, vars
 
 # global variable for game loop
 running = True
-clock = pygame.time.Clock()
         
-
 # counter for live score
 counter = vars.ZERO
 
