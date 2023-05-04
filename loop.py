@@ -42,6 +42,9 @@ def game_loop():
         character.Car.draw(character.Car, background.screen)
         moveCar(character.Car.speed)
 
+        #increase car speed over time
+        character.Car.speed += .008
+
         #This part is for the Cop Cars 
         if (len(vars.CopCars) < 1):
             character.CopCar.initCar(character.CopCar, "p-car-top-view-hi.png", background.SCREEN_WIDTH, random.randint(50, 700), 10)
@@ -89,6 +92,7 @@ def reset():
     character.Car.rect.y = 75
     character.CarAcc.rect.x = 0
     character.CarAcc.rect.y = 0
+    character.Car.speed = 10
     vars.counter = 0
     vars.CopCars = []
     vars.Cones = []

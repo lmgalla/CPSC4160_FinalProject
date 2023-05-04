@@ -95,6 +95,9 @@ def game_over():
     #display text
     text = crashFont.render("CRASH! GAME OVER!", True, (255, vars.ZERO, vars.ZERO))
     text_rect = text.get_rect(center=(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) - 200))
+
+
+
     text2 = font.render("PRESS M TO RETURN TO MAIN MENU", True, (255, vars.ZERO, vars.ZERO))
     text2_rect = text.get_rect(center=((SCREEN_WIDTH / 2)+50, (SCREEN_HEIGHT / 2)+100))
     text3 = font.render("PRESS X or ESC to EXIT", True, (255, vars.ZERO, vars.ZERO))
